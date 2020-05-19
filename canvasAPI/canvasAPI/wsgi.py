@@ -1,5 +1,5 @@
 """
-WSGI config for canvas_restAPI project.
+WSGI config for canvasAPI project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'canvas_restAPI.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'canvasAPI.settings')
 
 application = get_wsgi_application()
