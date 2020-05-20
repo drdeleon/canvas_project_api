@@ -40,16 +40,16 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    'establishment.apps.EstablishmentConfig',
-    'course.apps.CourseConfig',
-    'enrollment.apps.EnrollmentConfig',
-    'assignment.apps.AssignmentConfig',
-    'group.apps.GroupConfig',
-    'submission_file.apps.SubmissionFileConfig',
-    'professor.apps.ProfessorConfig',
-    'student.apps.StudentConfig',
-    'assistant.apps.AssistantConfig',
-    'announcement.apps.AnnouncementConfig',
+    'establishments.apps.EstablishmentConfig',
+    'courses.apps.CourseConfig',
+    'enrollments.apps.EnrollmentConfig',
+    'assignments.apps.AssignmentConfig',
+    'groups.apps.GroupConfig',
+    'submission_files.apps.SubmissionFileConfig',
+    'professors.apps.ProfessorConfig',
+    'students.apps.StudentConfig',
+    'assistants.apps.AssistantConfig',
+    'announcements.apps.AnnouncementConfig',
 
 ]
 
@@ -136,3 +136,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'

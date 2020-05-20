@@ -7,8 +7,10 @@ class CourseSerializers(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = (
+            'id',
+            'stablishment',
             'name',
+            'professor',
             'section',
             'year',
-            'cicle'     
-        )
+            'cicle')
