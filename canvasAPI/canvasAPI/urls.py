@@ -16,13 +16,44 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
+from rest_framework import routers
+from rest_framework_jwt.views import (
+    obtain_jwt_token,
+    refresh_jwt_token
+)
 
 from django.conf.urls.static import static
 from django.conf import settings
 
+from establishments.views import EstablishmentViewSet
+from courses.views import CourseViewSet
+from enrollments.views import EnrollmentViewSet
+from assignments.views import AssignmentViewSet
+from groups.views import GroupViewSet
+from professors.views import ProfessorViewSet
+from students.views import StudentViewSet
+from assistants.views import AssistantViewSet
+from announcements.views import AnnouncementViewSet
+
+router = routers.DefaultRouter()
+
+router.register(r'establishments', EstablishmentViewSet)
+router.register(r'courses', CourseViewSet)
+router.register(r'enrollments', EnrollmentViewSet)
+router.register(r'assignments', AssignmentViewSet)
+router.register(r'groups', GroupViewSet)
+router.register(r'professors', ProfessorViewSet)
+router.register(r'students', StudentViewSet)
+router.register(r'assistants', AssistantViewSet)
+router.register(r'announcements', AnnouncementViewSet)
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls')),
+    url(r'^api/v1/', include(router.urls)),
+    url(r'^api/v1/token-auth/', obtain_jwt_token),
+    url(r'^api/v1/token-refresh/', refresh_jwt_token),
+
 ]
 
 if settings.DEBUG:
