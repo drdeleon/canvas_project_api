@@ -11,5 +11,6 @@ class Professor(models.Model):
         blank=True
     )
 
+
     def __str__(self):
         return 'Professor: {}'.format(self.name)

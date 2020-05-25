@@ -17,21 +17,20 @@ class EstablishmentViewSet(viewsets.ModelViewSet):
             name='EstablishmentPermission',
             permission_configuration={
                 'base': {
-                    'create': True,
+                    'create': lambda user, req: user.is_authenticated, # TODO: Debería ser solo superuser.
                 },
                 'instance': {
-                    'retrieve': 'establishments.view_event',
+                    'retrieve': lambda user, req: user.is_authenticated, # TODO: Solo si está relacionado.
                     'destroy': False,
-                    'update': 'establishments.change_event',
-                    'partial_update': 'establishments.change_event',
+                    'update': 'establishments.change_establishment',
+                    'partial_update': 'establishments.change_establishment',
                 }
             }
         ),
     )
 
     def perform_create(self, serializer):
-        event = serializer.save()
+        establishment = serializer.save()
         user = self.request.user
-        assign_perm('establishments.change_event', user, event)
-        assign_perm('establishments.view_event', user, event)
+        assign_perm('establishments.change_establishment', user, establishment)
         return Response(serializer.data)

@@ -15,23 +15,23 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
     permission_classes = (
         APIPermissionClassFactory(
             name='EnrollmentPermission',
-            permission_configuration={
+            permission_configuration = {
                 'base': {
-                    'create': True,
+                    'create': lambda user, req: user.is_authenticated, # TODO: Debería se un superusuario.
                 },
                 'instance': {
-                    'retrieve': 'enrollments.view_event',
+                    'retrieve': lambda user, req: user.is_authenticated, # TODO: Personal autorizado.
                     'destroy': False,
-                    'update': 'enrollments.change_event',
-                    'partial_update': 'enrollments.change_event',
+                    'update': 'enrollments.change_enrollment',
+                    'partial_update': 'enrollments.change_enrollment',
                 }
             }
         ),
     )
 
     def perform_create(self, serializer):
-        event = serializer.save()
+        enrollment = serializer.save()
         user = self.request.user
-        assign_perm('enrollments.change_event', user, event)
-        assign_perm('enrollments.view_event', user, event)
+        assign_perm('enrollments.change_enrollment', user, enrollment)
+        assign_perm('enrollments.view_enrollment', user, enrollment)
         return Response(serializer.data)

@@ -11,5 +11,10 @@ class Assistant(models.Model):
         blank=True
     )
 
+    class Meta:
+        permissions = (
+            ('is_assistant', 'Check if is assistant')
+        )
+
     def __str__(self):
         return 'Assistant: {}'.format(self.name)

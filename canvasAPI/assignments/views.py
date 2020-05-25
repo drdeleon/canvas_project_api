@@ -17,21 +17,27 @@ class AssignmentViewSet(viewsets.ModelViewSet):
             name='AssignmentPermission',
             permission_configuration={
                 'base': {
-                    'create': True,
+                    'create': lambda user, req: user.is_authenticated, # TODO: Solo si es profesor del curso
+                    # 'list': False,
                 },
                 'instance': {
-                    'retrieve': 'assignments.view_event',
-                    'destroy': False,
-                    'update': 'assignments.change_event',
-                    'partial_update': 'assignments.change_event',
+                    'retrieve': lambda user, req: user.is_authenticated, # TODO: Solo si tiene acceso al curso
+                    'destroy': 'assignments.delete_assignment',
+                    'update': 'assignments.change_assignment',
+                    'partial_update': 'assignments.change_assignment',
                 }
             }
         ),
     )
 
     def perform_create(self, serializer):
-        event = serializer.save()
+        assignment = serializer.save()
         user = self.request.user
-        assign_perm('assignments.change_event', user, event)
-        assign_perm('assignments.view_event', user, event)
+
+        #Agregar el assignment a cada estudiante en el curso
+        for student in assignment.course.student_set.all():
+            student.assignments.add(assignment)
+
+        assign_perm('assignments.change_assignment', user, assignment)
+        assign_perm('assignments.delete_assignment', user, assignment)
         return Response(serializer.data)

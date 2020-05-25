@@ -20,18 +20,18 @@ class AssistantViewSet(viewsets.ModelViewSet):
                     'create': True,
                 },
                 'instance': {
-                    'retrieve': 'assistants.view_event',
+                    'retrieve': 'assistants.view_assistant',
                     'destroy': False,
-                    'update': 'assistants.change_event',
-                    'partial_update': 'assistants.change_event',
+                    'update': 'assistants.change_assistant',
+                    'partial_update': 'assistants.change_assistant',
                 }
             }
         ),
     )
 
     def perform_create(self, serializer):
-        event = serializer.save()
+        assistant = serializer.save()
         user = self.request.user
-        assign_perm('assistants.change_event', user, event)
-        assign_perm('assistants.view_event', user, event)
+        assign_perm('assistants.change_assistant', user, assistant)
+        assign_perm('assistants.view_assistant', user, assistant)
         return Response(serializer.data)

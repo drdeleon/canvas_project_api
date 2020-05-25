@@ -20,18 +20,17 @@ class ProfessorViewSet(viewsets.ModelViewSet):
                     'create': True,
                 },
                 'instance': {
-                    'retrieve': 'professors.view_event',
+                    'retrieve': lambda user, req: user.is_authenticated,
                     'destroy': False,
-                    'update': 'professors.change_event',
-                    'partial_update': 'professors.change_event',
+                    'update': 'professors.change_professor',
+                    'partial_update': 'professors.change_professor',
                 }
             }
         ),
     )
 
     def perform_create(self, serializer):
-        event = serializer.save()
+        professor = serializer.save()
         user = self.request.user
-        assign_perm('professors.change_event', user, event)
-        assign_perm('professors.view_event', user, event)
+        assign_perm('professors.change_professor', user, professor)
         return Response(serializer.data)

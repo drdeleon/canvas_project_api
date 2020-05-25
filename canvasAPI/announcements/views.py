@@ -15,23 +15,24 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     permission_classes = (
         APIPermissionClassFactory(
             name='AnnouncementPermission',
-            permission_configuration={
+            permission_configuration = {
                 'base': {
-                    'create': True,
+                    'create': lambda user, req: user.is_authenticated, #TODO: Solo si es professor o auxiliar
+                    # 'list': False,
                 },
                 'instance': {
-                    'retrieve': 'announcements.view_event',
-                    'destroy': False,
-                    'update': 'announcements.change_event',
-                    'partial_update': 'announcements.change_event',
+                    'retrieve': lambda user, req: user.is_authenticated, #TODO: Solo los que tiene relación con el curso
+                    'destroy': 'announcements.delete_announcement',
+                    'update': 'announcements.change_announcement',
+                    'partial_update': 'announcements.change_announcement',
                 }
             }
         ),
     )
 
     def perform_create(self, serializer):
-        event = serializer.save()
+        announcement = serializer.save()
         user = self.request.user
-        assign_perm('announcements.change_event', user, event)
-        assign_perm('announcements.view_event', user, event)
+        assign_perm('announcements.change_announcement', user, announcement)
+        assign_perm('announcements.delete_announcement', user, announcement)
         return Response(serializer.data)

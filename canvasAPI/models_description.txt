@@ -1,0 +1,46 @@
+COURSES
+    establishment FK
+    name
+    professor
+    section
+    year
+    cicle
+
+ANNOUNCEMENTS *
+    title
+    body
+    course FK
+
+ASSIGNMENTS
+    title
+    description
+    score
+    deadline
+    assignment_file
+    course FK
+
+ASSISTANTS
+    name
+    user
+
+ENROLLMENTS
+    course FK
+    student FK
+
+ESTABLISHMENTS
+    name
+    location
+
+GROUPS
+    name
+    course FK
+    students m2m
+
+PROFESSORS
+    name
+    user
+
+STUDENTS *
+    user
+    name
+    assignments m2m 
