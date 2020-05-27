@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'guardian',
 
+    'users.apps.UsersConfig',
     'establishments.apps.EstablishmentConfig',
     'courses.apps.CourseConfig',
     'enrollments.apps.EnrollmentConfig',

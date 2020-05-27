@@ -34,6 +34,7 @@ from professors.views import ProfessorViewSet
 from students.views import StudentViewSet
 from assistants.views import AssistantViewSet
 from announcements.views import AnnouncementViewSet
+from users.views import (registration_view)
 
 router = routers.DefaultRouter()
 
@@ -53,6 +54,7 @@ urlpatterns = [
     url(r'^api/v1/', include(router.urls)),
     url(r'^api/v1/token-auth/', obtain_jwt_token),
     url(r'^api/v1/token-refresh/', refresh_jwt_token),
+    path('api/v1/register/', registration_view, name='register'),
 
 ]
 

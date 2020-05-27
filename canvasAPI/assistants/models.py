@@ -13,7 +13,7 @@ class Assistant(models.Model):
 
     class Meta:
         permissions = (
-            ('is_assistant', 'Check if is assistant')
+            ('is_assistant', 'Check if is assistant'),
         )
 
     def __str__(self):
