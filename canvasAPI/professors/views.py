@@ -2,10 +2,12 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from guardian.shortcuts import assign_perm, remove_perm
+from permissions.services import APIPermissionClassFactory
 
 from professors.models import Professor
+
 from professors.serializers import ProfessorSerializer
-from permissions.services import APIPermissionClassFactory
+from courses.serializers import CourseSerializer
 
 # Create your views here.
 class ProfessorViewSet(viewsets.ModelViewSet):
@@ -20,10 +22,11 @@ class ProfessorViewSet(viewsets.ModelViewSet):
                     'create': True,
                 },
                 'instance': {
-                    'retrieve': lambda user, req: user.is_authenticated,
+                    'retrieve': 'professors.view_professor',
                     'destroy': False,
                     'update': 'professors.change_professor',
                     'partial_update': 'professors.change_professor',
+                    'courses': 'professors.view_professor'
                 }
             }
         ),
@@ -33,4 +36,12 @@ class ProfessorViewSet(viewsets.ModelViewSet):
         professor = serializer.save()
         user = self.request.user
         assign_perm('professors.change_professor', user, professor)
+        assign_perm('professors.view_professor', user, professor)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['get'])
+    def courses(self, request, pk=None):
+        professor = self.get_object()
+        queryset = professor.course_set.all()
+        courses = CourseSerializer(queryset, many=True).data
+        return Response(courses)

@@ -7,11 +7,13 @@ class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
         fields = (
-            "id", 
-            "title", 
-            "description", 
-            "score", 
-            "deadline", 
-            "assignment_file", 
-            "course", 
+            'id',
+            'title',
+            'description',
+            'score',
+            'creation_date',
+            'deadline',
+            'assignment_file',
+            'course',
+            'student',
         )

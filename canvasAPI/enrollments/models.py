@@ -10,3 +10,4 @@ class Enrollment(models.Model):
         "students.Student", 
         on_delete=models.CASCADE
     )
+    date = models.DateField(auto_now_add=True, auto_now=False, null=True)

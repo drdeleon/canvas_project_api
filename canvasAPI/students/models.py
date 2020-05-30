@@ -10,7 +10,6 @@ class Student(models.Model):
         blank=True
     )
     name = models.CharField(max_length=300)
-    assignments = models.ManyToManyField("assignments.Assignment")
 
     def __str__(self):
-        return 'Student: {}'.format(self.name)
+        return self.name

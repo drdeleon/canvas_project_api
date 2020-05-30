@@ -17,11 +17,11 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
             name='AnnouncementPermission',
             permission_configuration = {
                 'base': {
-                    'create': lambda user, req: user.is_authenticated, #TODO: Solo si es professor o auxiliar
+                    'create': False, # Can only create announcements through courses.
                     # 'list': False,
                 },
                 'instance': {
-                    'retrieve': lambda user, req: user.is_authenticated, #TODO: Solo los que tiene relación con el curso
+                    'retrieve': 'annoucements.view_announcement',
                     'destroy': 'announcements.delete_announcement',
                     'update': 'announcements.change_announcement',
                     'partial_update': 'announcements.change_announcement',
@@ -33,6 +33,19 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         announcement = serializer.save()
         user = self.request.user
-        assign_perm('announcements.change_announcement', user, announcement)
-        assign_perm('announcements.delete_announcement', user, announcement)
+        # Assign professor perms (view, change, delete)
+        assign_perm('announcements.view_announcement', announcement.course.professor.user, announcement)
+        assign_perm('announcements.change_announcement', announcement.course.professor.user, announcement)
+        assign_perm('announcements.delete_announcement', announcement.course.professor.user, announcement)
+        # Assign assitants' perms (view, change)
+        for assistant in announcement.course.assistant_set.all():
+            assign_perm('announcements.view_announcement', assistant.user, announcement)
+            assign_perm('announcements.change_announcement', assistant.user, announcement)
+
+        # Assign student perms (view)
+        for enrollment in announcement.course.enrollment_set.all():
+            assign_perm('announcements.view_announcement', enrollment.student.user, announcement)
+
+        # assign_perm('announcements.change_announcement', user, announcement)
+        # assign_perm('announcements.delete_announcement', user, announcement)
         return Response(serializer.data)

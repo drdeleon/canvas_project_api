@@ -34,10 +34,10 @@ class StudentViewSet(viewsets.ModelViewSet):
                     'destroy': False,
                     'update': 'students.change_student',
                     'partial_update': 'students.change_student',
-                    'enrollments': True, #TODO: Aún faltan permisos.
-                    'assignments': True, #TODO: Aún faltan permisos.
-                    'groups': True, #TODO: Aún faltan permisos.
-                    'courses': True, #TODO: Aún faltan permisos.
+                    'enrollments': 'students.view_student',
+                    'assignments': 'students.view_student',
+                    'groups': 'students.view_student',
+                    'courses': 'students.view_student',
                 }
             }
         ),
@@ -81,3 +81,4 @@ class StudentViewSet(viewsets.ModelViewSet):
         courses = self.get_student_courses(student)
         courses = CourseSerializer(courses, many=True).data
         return Response(courses)
+

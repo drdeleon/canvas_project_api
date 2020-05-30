@@ -19,4 +19,4 @@ class Course(models.Model):
     cicle = models.PositiveIntegerField()
 
     def __str__(self):
-        return 'Course: {}'.format(self.name)
+        return self.name

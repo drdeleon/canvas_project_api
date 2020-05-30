@@ -17,12 +17,11 @@ class AssignmentViewSet(viewsets.ModelViewSet):
             name='AssignmentPermission',
             permission_configuration={
                 'base': {
-                    'create': lambda user, req: user.is_authenticated, # TODO: Solo si es profesor del curso
-                    # 'list': False,
+                    'create': False,
                 },
                 'instance': {
-                    'retrieve': lambda user, req: user.is_authenticated, # TODO: Solo si tiene acceso al curso
-                    'destroy': 'assignments.delete_assignment',
+                    'retrieve': 'assignments.view_assignment',
+                    'destroy': False,
                     'update': 'assignments.change_assignment',
                     'partial_update': 'assignments.change_assignment',
                 }
@@ -34,10 +33,17 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         assignment = serializer.save()
         user = self.request.user
 
-        #Agregar el assignment a cada estudiante en el curso
-        for student in assignment.course.student_set.all():
-            student.assignments.add(assignment)
+        # Assign student perms(view, change)
+        assign_perm('assignments.change_assignment', assignment.student.user, assignment)
+        assign_perm('assignments.view_assignment', assignment.student.user, assignment)
 
-        assign_perm('assignments.change_assignment', user, assignment)
-        assign_perm('assignments.delete_assignment', user, assignment)
+        # Assign professor perms(view, change)
+        assign_perm('assignments.change_assignment', assignment.course.professor.user, assignment)
+        assign_perm('assignments.view_assignment', assignment.course.professor.user, assignment)
+
+        # Assign assistant perms(view, change)
+        for assistant in assignment.course.assistant_set.all():
+            assign_perm('assignments.change_assignment', assistant.user, assignment)
+            assign_perm('assignments.view_assignment', assistant.user, assignment)
+
         return Response(serializer.data)

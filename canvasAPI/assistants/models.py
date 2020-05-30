@@ -8,8 +8,9 @@ class Assistant(models.Model):
         User, 
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
-    )
+        blank=True)
+        
+    courses = models.ManyToManyField("courses.Course")
 
     class Meta:
         permissions = (
@@ -17,4 +18,4 @@ class Assistant(models.Model):
         )
 
     def __str__(self):
-        return 'Assistant: {}'.format(self.name)
+        return self.name

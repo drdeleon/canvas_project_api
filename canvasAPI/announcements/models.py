@@ -8,5 +8,4 @@ class Announcement(models.Model):
         'courses.Course',
         on_delete=models.CASCADE,
         null=True,
-        blank=True
-    )
+        blank=True)

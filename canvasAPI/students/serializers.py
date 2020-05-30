@@ -10,5 +10,4 @@ class StudentSerializer(serializers.ModelSerializer):
             'id',
             'user',
             'name',
-            'assignments',
         )

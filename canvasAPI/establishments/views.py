@@ -17,10 +17,11 @@ class EstablishmentViewSet(viewsets.ModelViewSet):
             name='EstablishmentPermission',
             permission_configuration={
                 'base': {
-                    'create': lambda user, req: user.is_authenticated, # TODO: Debería ser solo superuser.
+                    'create': True, # TODO: Debería ser solo superuser.
+                    'list': True,
                 },
                 'instance': {
-                    'retrieve': lambda user, req: user.is_authenticated, # TODO: Solo si está relacionado.
+                    'retrieve': True, # TODO: Solo si está relacionado.
                     'destroy': False,
                     'update': 'establishments.change_establishment',
                     'partial_update': 'establishments.change_establishment',
