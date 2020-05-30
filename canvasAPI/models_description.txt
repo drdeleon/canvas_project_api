@@ -1,10 +1,16 @@
 COURSES
     establishment FK
     name
-    professor
+    professor FK
     section
     year
     cicle
+    (   announcement_set,
+        group_set,
+        assistant_set,
+        enrollment_set,
+        assignment_set,
+    )
 
 ANNOUNCEMENTS *
     title
@@ -14,33 +20,48 @@ ANNOUNCEMENTS *
 ASSIGNMENTS
     title
     description
+    creation_date
     score
     deadline
     assignment_file
     course FK
+    student FK
 
 ASSISTANTS
     name
     user
+    courses M2M
 
 ENROLLMENTS
     course FK
     student FK
+    date
 
 ESTABLISHMENTS
     name
     location
+    (
+        course_set
+    )
 
 GROUPS
     name
     course FK
-    students m2m
+    students M2M
 
 PROFESSORS
     name
     user
+    (
+        course_set
+    )
 
 STUDENTS *
     user
     name
-    assignments m2m 
+    (
+        group_set,
+        assignment_set,
+        enrollment_set,
+    )
+

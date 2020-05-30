@@ -35,6 +35,7 @@ from students.views import StudentViewSet
 from assistants.views import AssistantViewSet
 from announcements.views import AnnouncementViewSet
 from users.views import (registration_view)
+from users.views import UserViewSet
 
 router = routers.DefaultRouter()
 
@@ -47,6 +48,7 @@ router.register(r'professors', ProfessorViewSet)
 router.register(r'students', StudentViewSet)
 router.register(r'assistants', AssistantViewSet)
 router.register(r'announcements', AnnouncementViewSet)
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
