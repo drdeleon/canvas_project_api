@@ -13,7 +13,7 @@ from groups.serializers import GroupSerializer
 
 
 def get_student_courses(self, student):
-    courses = student.enrollment_set.all().values('course')
+    courses = student.enrollment_set.all()
     print('courses:', courses)
     return courses
 
@@ -46,6 +46,8 @@ class StudentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         student = serializer.save()
         user = self.request.user
+        student.user = user
+        student.save()
         assign_perm('students.change_student', user, student)
         assign_perm('students.view_student', user, student)
         return Response(serializer.data)
@@ -78,7 +80,9 @@ class StudentViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'])
     def courses(self, request, pk=None):
         student = self.get_object()
-        courses = self.get_student_courses(student)
+        courses = []
+        for enr in student.enrollment_set.all():
+            courses.append(enr.course)
         courses = CourseSerializer(courses, many=True).data
         return Response(courses)
 

@@ -35,6 +35,8 @@ class ProfessorViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         professor = serializer.save()
         user = self.request.user
+        professor.user = user
+        professor.save()
         assign_perm('professors.change_professor', user, professor)
         assign_perm('professors.view_professor', user, professor)
         return Response(serializer.data)

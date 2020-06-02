@@ -32,6 +32,8 @@ class AssistantViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         assistant = serializer.save()
         user = self.request.user
+        assistant.user = user 
+        assistant.save()
         assign_perm('assistants.change_assistant', user, assistant)
         assign_perm('assistants.view_assistant', user, assistant)
         return Response(serializer.data)

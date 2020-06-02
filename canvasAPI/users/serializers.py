@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    is_assistant = serializers.SerializerMethodField()
-    is_student = serializers.SerializerMethodField()
-    is_professor = serializers.SerializerMethodField()
+    assistant = serializers.SerializerMethodField()
+    student = serializers.SerializerMethodField()
+    professor = serializers.SerializerMethodField()
     
     class Meta:
         model = User
@@ -15,9 +15,9 @@ class UserSerializer(serializers.ModelSerializer):
             'username',
             'password',
             'email',
-            'is_assistant',
-            'is_student',
-            'is_professor',
+            'assistant',
+            'student',
+            'professor',
         )
 
     def save(self):
@@ -29,11 +29,17 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
-    def get_is_professor(self, obj):
-        return hasattr(obj, 'professor')
+    def get_professor(self, obj):
+        if(hasattr(obj, 'professor')):
+            return obj.professor.id
+        return False
     
-    def get_is_student(self, obj):
-        return hasattr(obj, 'student')
+    def get_student(self, obj):
+        if(hasattr(obj, 'student')):
+            return obj.student.id
+        return False
     
-    def get_is_assistant(self, obj):
-        return hasattr(obj, 'assistant')
+    def get_assistant(self, obj):
+        if(hasattr(obj, 'assistant')):
+            return obj.assistant.id
+        return False
