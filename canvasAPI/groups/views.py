@@ -18,7 +18,7 @@ class GroupViewSet(viewsets.ModelViewSet):
             permission_configuration={
                 'base': {
                     'create': False, # Lógica que se maneja en curso.
-                    'list': True
+                    # 'list': True
                 },
                 'instance': {
                     'retrieve': 'groups.view_group', # TODO: Estudiantes, Auxiliares y Profesor.
