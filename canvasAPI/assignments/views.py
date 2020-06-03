@@ -33,17 +33,4 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         assignment = serializer.save()
         user = self.request.user
 
-        # Assign student perms(view, change)
-        assign_perm('assignments.change_assignment', assignment.student.user, assignment)
-        assign_perm('assignments.view_assignment', assignment.student.user, assignment)
-
-        # Assign professor perms(view, change)
-        assign_perm('assignments.change_assignment', assignment.course.professor.user, assignment)
-        assign_perm('assignments.view_assignment', assignment.course.professor.user, assignment)
-
-        # Assign assistant perms(view, change)
-        for assistant in assignment.course.assistant_set.all():
-            assign_perm('assignments.change_assignment', assistant.user, assignment)
-            assign_perm('assignments.view_assignment', assistant.user, assignment)
-
         return Response(serializer.data)

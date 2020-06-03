@@ -27,7 +27,7 @@ class StudentViewSet(viewsets.ModelViewSet):
             permission_configuration={
                 'base': {
                     'create': True,
-                    # 'list': False,
+                    'list': True,
                 },
                 'instance': {
                     'retrieve': 'students.view_student',

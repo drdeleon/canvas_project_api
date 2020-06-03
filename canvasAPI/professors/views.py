@@ -20,6 +20,7 @@ class ProfessorViewSet(viewsets.ModelViewSet):
             permission_configuration={
                 'base': {
                     'create': True,
+                    'list': True
                 },
                 'instance': {
                     'retrieve': 'professors.view_professor',

@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from guardian.shortcuts import assign_perm, remove_perm
 
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
@@ -18,3 +19,21 @@ class Assignment(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        assignment = self
+        super().save(*args, **kwargs)
+        
+        # Assign student perms(view, change)
+        assign_perm('assignments.change_assignment', assignment.student.user, assignment)
+        assign_perm('assignments.view_assignment', assignment.student.user, assignment)
+
+        # Assign professor perms(view, change)
+        assign_perm('assignments.change_assignment', assignment.course.professor.user, assignment)
+        assign_perm('assignments.view_assignment', assignment.course.professor.user, assignment)
+
+        # Assign assistant perms(view, change)
+        for assistant in assignment.course.assistant_set.all():
+            assign_perm('assignments.change_assignment', assistant.user, assignment)
+            assign_perm('assignments.view_assignment', assistant.user, assignment)
+

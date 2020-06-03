@@ -32,6 +32,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             permission_configuration={
                 'base': {
                     'create': True, # TODO: Debería haber un superusuario
+                    'list': True
                 },
                 'instance': {
                     'retrieve': 'courses.view_course',
@@ -60,8 +61,6 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         course = serializer.save()
-        user = self.request.user
-        professor = course.professor
         # Assign view permission for every student in the course.
         for enr in course.enrollment_set.all():
             assign_perm('courses.view_course', enr.student.user, course)
@@ -129,6 +128,17 @@ class CourseViewSet(viewsets.ModelViewSet):
         group_name  = request.data.get('name')
         group = Group(name=group_name, course=course)
         group.save()
+        for student in group.students.all():
+            assign_perm('groups.view_group', student.user, group)
+
+        # Assign view permission to students in group
+        for assistant in group.course.assistant_set.all():
+            assign_perm('groups.view_group', assistant.user, group)
+            assign_perm('groups.change_group', assistant.user, group)
+
+        assign_perm('groups.change_group', group.course.professor.user, group)
+        assign_perm('groups.delete_group', group.course.professor.user, group)
+        assign_perm('groups.view_group', group.course.professor.user, group)
         return Response(GroupSerializer(group).data)
 
     @action(detail=True,url_path='create-announcement', methods=['post'])
@@ -189,13 +199,12 @@ class CourseViewSet(viewsets.ModelViewSet):
     def create_course_assignment(self, request, pk=None):
         course = self.get_object()
         for enrollment in course.enrollment_set.all():
-            assignment = enrollment.student.assignments.create(
+            assignment = enrollment.student.assignment_set.create(
                 title = request.data.get('title'),
                 description = request.data.get('description'),
-                score = request.data.get('score'),
                 deadline = request.data.get('deadline'),
                 assignment_file = request.data.get('assignment_file'),
-                course = request.data.get('course'))
+                course = course)
         return Response(AssignmentSerializer(assignment).data)
 
     @action(detail=True,url_path='delete-assignment', methods=['post'])

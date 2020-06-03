@@ -9,5 +9,5 @@ class EnrollmentSerializer(serializers.ModelSerializer):
             'id',
             'course',
             'student',
-            'data'
+            'date'
         )
