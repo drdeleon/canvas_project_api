@@ -18,7 +18,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
             permission_configuration = {
                 'base': {
                     'create': False, # Can only create announcements through courses.
-                    'list': True,
+                    # 'list': True,
                 },
                 'instance': {
                     'retrieve': 'announcements.view_announcement',

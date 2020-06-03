@@ -32,7 +32,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             permission_configuration={
                 'base': {
                     'create': True, # TODO: Debería haber un superusuario
-                    'list': True
+                    # 'list': True
                 },
                 'instance': {
                     'retrieve': 'courses.view_course',

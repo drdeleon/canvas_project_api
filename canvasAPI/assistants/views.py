@@ -20,7 +20,7 @@ class AssistantViewSet(viewsets.ModelViewSet):
             permission_configuration={
                 'base': {
                     'create': True,
-                    'list': True
+                    # 'list': True
                 },
                 'instance': {
                     'retrieve': 'assistants.view_assistant',

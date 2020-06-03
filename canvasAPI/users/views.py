@@ -28,7 +28,7 @@ class UserViewSet(viewsets.ModelViewSet):
             permission_configuration={
                 'base': {
                     'create': True,
-                    'list': True
+                    # 'list': True
                 },
                 'instance': {
                     'retrieve': evaluar_user,
